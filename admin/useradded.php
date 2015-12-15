@@ -70,4 +70,10 @@ if(isset($_POST['submit'])) {
 	echo 'User Entered';
 	mysqli_stmt_close($stmt);
 	mysqli_close($dbc);
+	/**
+	 * vidis koliko manje linija koda ima kad ovako ne koristis if i else. to je ono 
+	 * o cemu sam ti pricao.
+	 * https://github.com/bmpasini/Principles-of-Database-Systems/tree/master/q1_php/examples
+	 * i sa ovog si primera gledao na github-u.
+	 */
 }
