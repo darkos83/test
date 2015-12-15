@@ -53,7 +53,8 @@ if(isset($_POST['submit'])) {
                   type, created) VALUES (?, ?, ?
                   , NOW()) ";
     $stmt = mysqli_prepare($dbc, $query);
-	mysqli_stmt_bind_param($stmt,"sss", $email, sha1($password), $type);
+//sta ti je ovo sss?
+	mysqli_stmt_bind_param($stmt,"sss", $_POST['email'], sha1($_POST['password']), $_POST['type']);
 	mysqli_stmt_execute($stmt);
 	$affected_rows = mysqli_stmt_affected_rows($stmt);
 
