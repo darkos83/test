@@ -6,7 +6,11 @@ $('button').on('click', function(){
 		data: params,
 	})
 	.done(function(data) {
-		console.log("success", data);
+		if (!data.greska) {
+			console.log("error", data);
+			return;
+		}
+		window.location = data.url;
 	})
 	.fail(function(data) {
 		console.log("error", data);

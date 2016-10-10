@@ -41,10 +41,16 @@ $_SESSION['tip_korisnika'] = $korisnik->vratiTipKorisnika();
 $_SESSION['ime'] = $korisnik->vratiIme();
 $_SESSION['prezime'] = $korisnik->vratiPrezime();
 
+
 $url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
 if (Korisnik::PROFESOR == $korisnik->vratiTipKorisnika()) {
 	header('Location: ' . $url . 'profesor.php');
+	exit;
 }
 if (Korisnik::STUDENT == $korisnik->vratiTipKorisnika()) {
 	header('Location: ' . $url . 'student.php');
+	exit;
 }
+
+echo json_encode(array('greska' => 0, 'url' => 'Neispravni podaci za logovanje!'));
+exit;
