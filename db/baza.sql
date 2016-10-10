@@ -4,7 +4,7 @@ CREATE TABLE korisnici (
   sifra VARCHAR(256) NOT NULL,
   ime VARCHAR(256) NOT NULL,
   prezime VARCHAR(256) NOT NULL,
-  tip_korisinika TINYINT(2) NOT NULL
+  tip_korisnika TINYINT(2) NOT NULL
 ) ENGINE = InnoDB;
 
 CREATE TABLE tip_korisnika (

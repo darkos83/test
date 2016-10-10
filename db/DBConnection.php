@@ -10,15 +10,14 @@ class DBConnection {
 	public static function get($new = false) {
 		if (empty(self::$instance) || $new) {
 			global $db_server;
-			global $db_port;
 			global $db_login;
 			global $db_pass;
 			global $db_name;
 			try {
 				Log::info("Connecting to database...");
-				self::$instance = new PDO("mysql:host=$db_server;port=$db_port;dbname=$db_name", "$db_login", "$db_pass",  array(PDO::ATTR_PERSISTENT => false, PDO::MYSQL_ATTR_INIT_COMMAND => MYSQL_SET_NAMES_VALUE));				
+				self::$instance = new PDO("mysql:host=$db_server;dbname=$db_name", "$db_login", "$db_pass",  array(PDO::ATTR_PERSISTENT => false, PDO::MYSQL_ATTR_INIT_COMMAND => MYSQL_SET_NAMES_VALUE));
 				self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				
+
 			} catch (Exception $e) {
 				Log::err("Exception: " . $e->getMessage());
 				Log::err("Trace: " . $e->getTraceAsString());
