@@ -62,11 +62,11 @@ class Korisnik {
 
 	public static function nadjiPoId($korisnik_id) {
 		if (empty($korisnik_id)) {
-			return array();
+			return null;
 		}
 		$podaci = DBConnection::fetch("SELECT * FROM korisnici WHERE korisnik_id = {$korisnik_id}");
 		if (empty($podaci)) {
-			return array();
+			return null;
 		}
 		$korisnik = new self;
 		$korisnik->postaviKorisnikId($podaci['korisnik_id']);
