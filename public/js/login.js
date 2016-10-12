@@ -1,34 +1,13 @@
-$('button').on('click', function(){
-	var params = $(this).closest('form').serializeObject();
-	$.ajax({
-		url: 'login.php',
-		type: 'POST',
-		data: params,
-	})
-	.done(function(data) {
-		if (!data.greska) {
-			console.log("error", data);
-			return;
-		}
-		window.location = data.url;
-	})
-	.fail(function(data) {
-		console.log("error", data);
-	});
-})
-
-$.fn.serializeObject = function() {
-	var o = {};
-	var a = this.serializeArray();
-	$.each(a, function() {
-		if (o[this.name]) {
-			if (!o[this.name].push) {
-				o[this.name] = [o[this.name]];
-			}
-			o[this.name].push(this.value || '');
-		} else {
-			o[this.name] = this.value || '';
-		}
-	});
-	return o;
-};
+ $('.promeniAkciju').on('click', function(event) {
+ 	var akcija = $(this).data().value
+ 	  , text = $(this).text();
+ 	$('.promeniAkciju').removeClass('hidden');
+ 	if (akcija === 'logovanje') {
+ 		$('.za-registraciju').addClass('hidden');
+ 	} else {
+ 		$('.za-registraciju').removeClass('hidden')
+ 	}
+ 	$(this).addClass('hidden');
+ 	$('h3').text(text);
+ 	$('[type="hidden"]').val(akcija);
+ });

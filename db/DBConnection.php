@@ -88,16 +88,8 @@ class DBConnection {
 		return self::$instance->lastInsertId();
 	}
 	
-	public static function prepareString($text, $encode = ENCODE_ALL_DATA, $from = ENCODING_FROM, $to = ENCODING_TO) {
+	public static function prepareString($text) {
 		$text = addslashes(stripslashes(stripslashes(stripslashes(trim(html_entity_decode($text))))));
-		if ($encode) {
-			$enc = mb_detect_encoding($text, "$from", false);
-			if (($enc == 'ASCII') and ($to == "UTF-8")) {
-				$text = utf8_encode($text);
-			} else {
-				$text = mb_convert_encoding($text, "$to", mb_detect_encoding($text, "$from", false));
-			}
-		}
 		return $text;
 	}
 }
