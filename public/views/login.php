@@ -1,5 +1,5 @@
 <?php include 'header.php'; ?>
-<div class="login-form">
+<div class="login-form col-md-6 col-xs-12 no-float">
     <form method="post">
         <h3>Uloguj se</h3>
         <div class="form-group hidden za-registraciju">
@@ -19,7 +19,7 @@
             <input type="password" name="sifra" class="form-control" placeholder="Sifra">
         </div>
         <input type="hidden" name="akcija" value="logovanje">
-        <button type="submit" name="submit" class="col-md-12 btn btn-default btn-info">Uloguj se</button>
+        <button type="submit" name="submit" class="col-md-12 col-xs-12 btn btn-default btn-info">Uloguj se</button>
         <div class="links">
             <a href="javascript:void(0)" class="promeniAkciju hidden" data-value="logovanje">Uloguj se</a>
             <a href="javascript:void(0)" class="promeniAkciju" data-value="registracija_studenta">Registruj studenta</a>

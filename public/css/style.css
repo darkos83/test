@@ -1,11 +1,7 @@
 .wrapper {
-	width: 50%;
-	min-width: 500px;
-	margin: 10% auto 0;
+	margin: 5% auto 0;
 }
 .login-form {
-	width: 30%;
-	min-width: 200px;
 	margin: 0 auto;
 }
 .login-form h3{
@@ -15,7 +11,7 @@
 	text-decoration: none;
     padding: 1%;
     width: 49%;
-    border-right: 1px solid;
+    border-left: 1px solid;
     display: inline-block;
 }
 .my-alert {
@@ -26,4 +22,13 @@
 }
 .btn {
 	border-radius: 0 !important
+}
+.create-exam .header{
+	text-align: center
+}
+.create-exam ul{
+	list-style:none;
+}
+.create-exam input[type="radio"]{
+	top: 6px
 }

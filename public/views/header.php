@@ -12,10 +12,10 @@
 </head>
 <body>
 <?php if (!empty($_SESSION)): ?>
-<a href="logout.php" class="col-md-12 btn btn-default btn-info no-float">Izloguj se</a>
+<a href="logout.php" class="col-md-12 col-xs-12 btn btn-default btn-info">Izloguj se</a>
 <?php endif; ?>
 <div class="container-fluid">
-	<div class="wrapper">
+	<div class="wrapper col-md-6 col-xs-12 no-float">
 		<?php if(!empty($greske)): ?>
 			<div class="alert alert-danger my-alert">
 				<?php echo implode('</br>', $greske); ?>

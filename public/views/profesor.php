@@ -1,5 +1,5 @@
 <?php include 'header.php'; ?>
-<a href="kreiraj_ispit.php" class="col-md-12 btn btn-default btn-success no-float">
+<a href="kreiraj_ispit.php" class="col-md-12 col-xs-12 btn btn-default btn-success no-float">
 	<span class="glyphicon glyphicon-plus"></span> Kreiraj ispit
 </a>
 <div class="list-group">
