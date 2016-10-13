@@ -14,13 +14,14 @@ class DBConnection {
 			global $db_pass;
 			global $db_name;
 			try {
-				Log::info("Connecting to database...");
-				self::$instance = new PDO("mysql:host=$db_server;dbname=$db_name", "$db_login", "$db_pass",  array(PDO::ATTR_PERSISTENT => false, PDO::MYSQL_ATTR_INIT_COMMAND => MYSQL_SET_NAMES_VALUE));
+				self::$instance = new PDO(
+					"mysql:host=$db_server;dbname=$db_name", "$db_login",
+					"$db_pass",
+					array(PDO::ATTR_PERSISTENT => false, PDO::MYSQL_ATTR_INIT_COMMAND => MYSQL_SET_NAMES_VALUE)
+				);
 				self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
 			} catch (Exception $e) {
-				Log::err("Exception: " . $e->getMessage());
-				Log::err("Trace: " . $e->getTraceAsString());
+				var_dump($e->getMessage());die;
 				self::$instance = null;
 			}
 		}
@@ -32,44 +33,28 @@ class DBConnection {
 			try {
 				return self::$instance->setAttribute($attribute, $value);
 			} catch (Exception $e) {
-				Log::err("Exception: " . $e->getMessage());
-				Log::err("Trace: " . $e->getTraceAsString());
 			}
-		} else {
-			Log::err("Not connected to database.");
 		}
 		return false;
 	}
 	
 	public static function exec($sql) {
-		Log::info("Execute statement: $sql");
 		if (self::get()) {
 			try {
 				return self::$instance->exec($sql);
 			} catch (Exception $e) {
-				Log::err("Exception: " . $e->getMessage());
-				Log::err("Trace: " . $e->getTraceAsString());
 			}
-		} else {
-			Log::err("Not connected to database.");
 		}
 		return null;
 	}
 	
 	public static function query($sql) {
-		Log::info("Query: $sql");
 		if (self::get()) {
 			try {
 				return self::$instance->query($sql);
 			} catch (PDOException $exception) {
-				Log::err("PDO Exception: " . $exception->getMessage());
-				Log::err("PDO Trace: " . $exception->getTraceAsString());
 			} catch (Exception $e) {
-				Log::err("Exception: " . $e->getMessage());
-				Log::err("Trace: " . $e->getTraceAsString());
 			}
-		} else {
-			Log::err("Not connected to database.");
 		}
 		return null;
 	}

@@ -29,7 +29,6 @@ class Korisnik {
 		$sql = "INSERT INTO korisnici (" .  implode(',', $imena_kolone).") "
 				. "VALUES (" . implode(',', $vrednosti_kolone). ")";
 		$res = DBConnection::exec($sql);
-
 		if ($res) {
 			$res = DBConnection::fetch("SELECT LAST_INSERT_ID()");
 			if ( !empty($res) ) {
@@ -94,6 +93,90 @@ class Korisnik {
 		$korisnik->postaviPrezime($podaci['prezime']);
 		$korisnik->postaviTipKorisnika($podaci['tip_korisnika']);
 		return $korisnik;
+	}
+
+	public static function prijaviStudentaZaIspit($ispit_id, $korisnik_id) {
+		if (empty($ispit_id)) {
+			throw new Exception('Id Ispit je prazan!!!');
+		}
+		if (empty($korisnik_id)) {
+			throw new Exception('Id Korisnika je prazan!!!');
+		}
+		$ispit = Ispit::nadjiPoId($ispit_id);
+		if (empty($ispit)) {
+			throw new Exception('Ispit nije pronadjen!!!!');
+		}
+		$korisnik = self::nadjiPoId($korisnik_id);
+		if (empty($korisnik)) {
+			throw new Exception('Korisnik nije pronadjen!!!');
+		}
+		if ($korisnik->vratiTipKorisnika() != self::STUDENT) {
+			throw new Exception('Korisnik nije student!!!');
+		}
+		$prijavljen = DBConnection::fetch("SELECT * FROM prijave WHERE ispit_id = {$ispit_id} AND korisnik_id = {$korisnik_id};");
+		if (!empty($prijavljen)) {
+			throw new Exception('Student je vec prijavljen!!!');
+		}
+		return DBConnection::exec("INSERT INTO prijave VALUES (NULL, {$ispit_id}, {$korisnik_id})");
+	}
+
+	public static function nadjiPrijavnjeneIspiteZaStudenta($korisnik_id) {
+		if (empty($korisnik_id)) {
+			throw new Exception('Id Korisnika je prazan!!!');
+		}
+		$korisnik = self::nadjiPoId($korisnik_id);
+		if (empty($korisnik)) {
+			throw new Exception('Korisnik nije pronadjen!!!');
+		}
+		if ($korisnik->vratiTipKorisnika() != self::STUDENT) {
+			throw new Exception('Korisnik nije student!!!');
+		}
+		$upit = "SELECT i.ispit_id, i.naziv_ispita, i.broj_pitanja, i.korisnik_id "
+				. "FROM prijave AS p "
+				. "INNER JOIN ispiti AS i ON i.ispit_id = p.ispit_id "
+				. "LEFT JOIN rezultati AS r ON r.ispit_id = p.ispit_id "
+				. "WHERE p.korisnik_id = {$korisnik_id} AND r.rezultat_id IS NULL;";
+		$ispiti = DBConnection::fetchAll($upit);
+		if (empty($ispiti)) {
+			return array();
+		}
+		$_ispiti = array();
+		foreach ($ispiti as $ispit) {
+			$_ispit = new Ispit();
+			$_ispit->postaviIspitId($ispit['ispit_id']);
+			$_ispit->postaviNazivIspita($ispit['naziv_ispita']);
+			$_ispit->postaviBrojPitanja($ispit['broj_pitanja']);
+			$_ispit->postaviKorisnikId($ispit['korisnik_id']);
+			array_push($_ispiti, $_ispit);
+		}
+		return$_ispiti;
+	}
+
+	public static function nadjiPolozeneIspiteZaStudenta($korisnik_id) {
+		if (empty($korisnik_id)) {
+			throw new Exception('Id Korisnika je prazan!!!');
+		}
+		$korisnik = self::nadjiPoId($korisnik_id);
+		if (empty($korisnik)) {
+			throw new Exception('Korisnik nije pronadjen!!!');
+		}
+		if ($korisnik->vratiTipKorisnika() != self::STUDENT) {
+			throw new Exception('Korisnik nije student!!!');
+		}
+		$upit = "SELECT i.ispit_id, i.naziv_ispita, i.broj_pitanja, i.korisnik_id, r.rezultat "
+			. "FROM rezultati AS r "
+			. "INNER JOIN ispiti AS i ON i.ispit_id = r.ispit_id "
+			. "WHERE r.korisnik_id = {$korisnik_id};";
+		$ispiti = DBConnection::fetchAll($upit);
+		if (empty($ispiti)) {
+			return array();
+		}
+		$_ispiti = array();
+		foreach ($ispiti as $ispit) {
+			$_ispit = new Rezultat($ispit);
+			array_push($_ispiti, $_ispit);
+		}
+		return$_ispiti;
 	}
 
 	public function vratiKorisnikId()

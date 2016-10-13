@@ -39,3 +39,16 @@ CREATE TABLE odgovori (
   tacno TINYINT(1) NOT NULL,
   pitanje_id INT NOT NULL
 ) ENGINE = InnoDB;
+
+CREATE TABLE prijave (
+  prijava_id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  ispit_id INT NOT NULL,
+  korisnik_id INT NOT NULL
+) ENGINE = InnoDB;
+
+CREATE TABLE rezultati (
+  rezultat_id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  ispit_id INT NOT NULL,
+  korisnik_id INT NOT NULL,
+  rezultat DECIMAL(10,2) NOT NULL
+) ENGINE = InnoDB;
