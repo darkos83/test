@@ -4,13 +4,11 @@ class Odgovor {
 
 	protected $odgovor_id;
 	protected $odgovor;
-	protected $tacno;
 	protected $pitanje_id;
 
 	public function insertuj() {
 		$podaci = array();
 		$podaci['odgovor'] = DBConnection::prepareString($this->vratiOdgovor());
-		$podaci['tacno'] = $this->vratiTacno();
 		$podaci['pitanje_id'] = $this->vratiPitanjeId();
 
 		$imena_kolone = array();
@@ -40,7 +38,6 @@ class Odgovor {
 			if (!empty($odgovor)) {
 				$podaci = array();
 				$podaci['odgovor'] = $this->vratiOdgovor();
-				$podaci['tacno'] = $this->vratiTacno();
 				$podaci['pitanje_id'] = $this->vratiPitanjeId();
 			}
 			$promene = array();
@@ -65,7 +62,6 @@ class Odgovor {
 		$odgovor = new self;
 		$odgovor->postaviOdgovorId($podaci['odgovor_id']);
 		$odgovor->postaviOdgovor($podaci['odgovor']);
-		$odgovor->postaviTacno($podaci['tacno']);
 		$odgovor->postaviPitanjeId($podaci['pitanje_id']);
 		return $odgovor;
 	}
@@ -74,7 +70,7 @@ class Odgovor {
 		if (empty($pitanje_id)) {
 			return array();
 		}
-		$podaci = DBConnection::fetchAll("SELECT * FROM odgovori WHERE pitanje_id = {$pitanje_id}");
+		$podaci = DBConnection::fetchAll("SELECT * FROM odgovori WHERE pitanje_id = {$pitanje_id} ORDER BY odgovor_id ASC;");
 		if (empty($podaci)) {
 			return array();
 		}
@@ -83,11 +79,21 @@ class Odgovor {
 			$odgovor = new self;
 			$odgovor->postaviOdgovorId($podatak['odgovor_id']);
 			$odgovor->postaviOdgovor($podatak['odgovor']);
-			$odgovor->postaviTacno($podatak['tacno']);
 			$odgovor->postaviPitanjeId($podatak['pitanje_id']);
 			array_push($odgovori, $odgovor);
 		}
 		return $odgovori;
+	}
+
+	public static function izbrisiOdgovoreZaPitanje($pitanje_id){
+		if (empty($pitanje_id)) {
+			return false;
+		}
+		$pitanje = Pitanje::nadjiPoId($pitanje_id);
+		if (empty($pitanje)) {
+			return true;
+		}
+		return DBConnection::exec("DELETE FROM odgovori WHERE pitanje_id = {$pitanje->vratiPitanjeId()};");
 	}
 
 	public function vratiOdgovorId()
@@ -108,16 +114,6 @@ class Odgovor {
 	public function postaviOdgovor($odgovor)
 	{
 		$this->odgovor = $odgovor;
-	}
-
-	public function vratiTacno()
-	{
-		return $this->tacno;
-	}
-
-	public function postaviTacno($tacno)
-	{
-		$this->tacno = $tacno;
 	}
 
 	public function vratiPitanjeId()

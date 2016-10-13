@@ -1,18 +1,31 @@
 <?php include 'header.php'; ?>
-<a href="kreiraj_ispit.php" class="col-md-12 btn btn-default btn-success no-float">
-	<span class="glyphicon glyphicon-plus"></span> Kreiraj ispit
-</a>
+<h3><?php echo $_SESSION['ime'] . ' ' . $_SESSION['prezime']?></h3>
+
+<h4>Prijave:</h4>
 <div class="list-group">
 <?php
-	$ispiti = Ispit::nadjiPoKorisnikId($_SESSION['korisnik_id']);
+	if (!empty($prijave)) {
+		foreach ($prijave as $prijava) {
+			$url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/polaganje_ispita.php?ispit_id={$prijava->vratiIspitId()}";
+			?>
+			<a href="<?php echo $url?>" class="list-group-item"><?php echo $prijava->vratiNazivIspita()?></a>
+		<?php
+		}
+	}
+?>
+</div>
+<h4>polagani ispiti:</h4>
+<div class="list-group">
+	<?php
+	$ispiti = Korisnik::nadjiPrijavnjeneIspiteZaStudenta();
 	if (!empty($ispiti)) {
 		foreach ($ispiti as $ispit) {
 			$url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/ispit.php?ispit_id={$ispit->vratiIspitId()}";
 			?>
 			<a href="<?php echo $url?>" class="list-group-item"><?php echo $ispit->vratiNazivIspita()?></a>
-		<?php
+			<?php
 		}
 	}
-?>
+	?>
 </div>
 <?php include 'footer.php'; ?>

@@ -120,6 +120,28 @@ class Korisnik {
 		return DBConnection::exec("INSERT INTO prijave VALUES (NULL, {$ispit_id}, {$korisnik_id})");
 	}
 
+	public static function proveraDaLiJePrijavljenZaIspit($ispit_id, $korisnik_id) {
+		if (empty($ispit_id)) {
+			throw new Exception('Id Ispit je prazan!!!');
+		}
+		if (empty($korisnik_id)) {
+			throw new Exception('Id Korisnika je prazan!!!');
+		}
+		$ispit = Ispit::nadjiPoId($ispit_id);
+		if (empty($ispit)) {
+			throw new Exception('Ispit nije pronadjen!!!!');
+		}
+		$korisnik = self::nadjiPoId($korisnik_id);
+		if (empty($korisnik)) {
+			throw new Exception('Korisnik nije pronadjen!!!');
+		}
+		if ($korisnik->vratiTipKorisnika() != self::STUDENT) {
+			throw new Exception('Korisnik nije student!!!');
+		}
+		$prijavljen = DBConnection::fetch("SELECT * FROM prijave WHERE ispit_id = {$ispit_id} AND korisnik_id = {$korisnik_id};");
+		return !empty($prijavljen);
+	}
+
 	public static function nadjiPrijavnjeneIspiteZaStudenta($korisnik_id) {
 		if (empty($korisnik_id)) {
 			throw new Exception('Id Korisnika je prazan!!!');
@@ -134,14 +156,17 @@ class Korisnik {
 		$upit = "SELECT i.ispit_id, i.naziv_ispita, i.broj_pitanja, i.korisnik_id "
 				. "FROM prijave AS p "
 				. "INNER JOIN ispiti AS i ON i.ispit_id = p.ispit_id "
-				. "LEFT JOIN rezultati AS r ON r.ispit_id = p.ispit_id "
-				. "WHERE p.korisnik_id = {$korisnik_id} AND r.rezultat_id IS NULL;";
+				. "WHERE p.korisnik_id = {$korisnik_id}";
 		$ispiti = DBConnection::fetchAll($upit);
 		if (empty($ispiti)) {
 			return array();
 		}
 		$_ispiti = array();
 		foreach ($ispiti as $ispit) {
+			$polagao = DBConnection::fetch("SELECT * FROM rezultati WHERE ispit_id = {$ispit['ispit_id']} AND korisnik_id = {$korisnik_id};");
+			if (!empty($polagao)) {
+				continue;
+			}
 			$_ispit = new Ispit();
 			$_ispit->postaviIspitId($ispit['ispit_id']);
 			$_ispit->postaviNazivIspita($ispit['naziv_ispita']);

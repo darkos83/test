@@ -30,13 +30,13 @@ CREATE TABLE ispiti (
 CREATE TABLE pitanja (
   pitanje_id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   pitanje VARCHAR(256) NOT NULL,
-  ispit_id INT NOT NULL
+  ispit_id INT NOT NULL,
+  tacan_odgovor_id INT NULL
 ) ENGINE = InnoDB;
 
 CREATE TABLE odgovori (
   odgovor_id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   odgovor VARCHAR(256) NOT NULL,
-  tacno TINYINT(1) NOT NULL,
   pitanje_id INT NOT NULL
 ) ENGINE = InnoDB;
 
