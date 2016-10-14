@@ -21,8 +21,6 @@ try {
 if (empty($greske)) {
 	$upozorenja = array();
 	if (!empty($_POST)) {
-		var_dump(count($_POST));
-		var_dump($ispit->vratiBrojPitanja());
 		if (count($_POST) != $ispit->vratiBrojPitanja()) {
 			array_push($upozorenja, 'Niste odgovorili na sva pitanja');
 		}

@@ -7,9 +7,6 @@
 	die;
 	endif;
 ?>
-<a href="kreiraj_ispit.php" class="btn btn-lg btn-success">
-	<span class="glyphicon glyphicon-plus"></span> Kreiraj ispit
-</a>
 <div class="list-group">
 <?php
 	$ispiti = Ispit::nadjiPoKorisnikId($_SESSION['korisnik_id']);

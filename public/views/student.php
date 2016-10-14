@@ -19,7 +19,7 @@
 </div>
 
 <h4>Završeni ispiti:</h4>
-<div class="container">
+<div class="list-group">
 	<?php
 	if (!empty($polaganje)) {
 		?>
@@ -34,7 +34,7 @@
 			<div class="row <?php echo $ispit->vratiRezultat() >= 50 ? 'alert-success' : 'alert-danger';?>">
 				<div class="col-lg-4"><?php echo $ispit->vratiNazivIspita();?></div>
 				<div class="col-lg-4"><?php echo $ispit->vratiBrojPitanja();?></div>
-				<div class="col-lg-4"><?php echo $ispit->vratiRezultat();?></div>
+				<div class="col-lg-4"><?php echo $ispit->vratiRezultat();?>%</div>
 			</div>
 			<?php
 		}

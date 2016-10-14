@@ -44,6 +44,10 @@ if (isset($_POST['submit'])) {
 		if (empty($tip_korisnika)) {
 			array_push($upozorenja, 'Tip korisnika nije validan!');
 		}
+		$postoji = Korisnik::nadjiPoKorisnickomImenu($_POST['korisnicko_ime']);
+		if (!empty($postoji)) {
+			array_push($upozorenja, "Korisnik sa {$_POST['korisnicko_ime']} vec postoji");
+		}
 		if (empty($upozorenja)) {
 			$korisnik = new Korisnik();
 			$korisnik->postaviIme($_POST['ime']);

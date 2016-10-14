@@ -4,12 +4,12 @@
 </a>
 <div class="list-group">
 <?php
-	$ispiti = Ispit::nadjiPoKorisnikId($_SESSION['korisnik_id']);
 	if (!empty($ispiti)) {
 		foreach ($ispiti as $ispit) {
-			$url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/ispit.php?ispit_id={$ispit->vratiIspitId()}";
+			$url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
 			?>
-			<a href="<?php echo $url?>" class="list-group-item"><?php echo $ispit->vratiNazivIspita()?></a>
+			<a href="<?php echo $url . "/ispit.php?ispit_id={$ispit->vratiIspitId()}"; ?>" class="list-group-item col-md-8"><?php echo $ispit->vratiNazivIspita()?></a>
+			<a href="<?php echo $url . "/prijava_studenata.php?ispit_id={$ispit->vratiIspitId()}";  ?>" class="list-group-item col-md-4">Prijavi studente</a>
 		<?php
 		}
 	}

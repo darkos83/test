@@ -95,6 +95,35 @@ class Korisnik {
 		return $korisnik;
 	}
 
+	public static function nadjiPoKorisnickomImenu($korisnicko_ime) {
+		if (empty($korisnicko_ime)) {
+			return null;
+		}
+		$korisnicko_ime = DBConnection::prepareString($korisnicko_ime);
+		$podaci = DBConnection::fetch("SELECT * FROM korisnici WHERE korisnicko_ime = '{$korisnicko_ime}'");
+		if (empty($podaci)) {
+			return null;
+		}
+		$korisnik = new self;
+		$korisnik->postaviKorisnikId($podaci['korisnik_id']);
+		$korisnik->postaviKorisnickoIme($podaci['korisnicko_ime']);
+		$korisnik->postaviIme($podaci['ime']);
+		$korisnik->postaviPrezime($podaci['prezime']);
+		$korisnik->postaviTipKorisnika($podaci['tip_korisnika']);
+		return $korisnik;
+	}
+
+	public static function obrisiPrijaveZaIspit($ispit_id) {
+		if (empty($ispit_id)) {
+			throw new Exception('Id Ispit je prazan!!!');
+		}
+		$ispit = Ispit::nadjiPoId($ispit_id);
+		if (empty($ispit)) {
+			throw new Exception('Ispit nije pronadjen!!!!');
+		}
+		return DBConnection::exec("DELETE FROM prijave WHERE ispit_id = {$ispit->vratiIspitId()};");
+	}
+
 	public static function prijaviStudentaZaIspit($ispit_id, $korisnik_id) {
 		if (empty($ispit_id)) {
 			throw new Exception('Id Ispit je prazan!!!');
@@ -115,7 +144,7 @@ class Korisnik {
 		}
 		$prijavljen = DBConnection::fetch("SELECT * FROM prijave WHERE ispit_id = {$ispit_id} AND korisnik_id = {$korisnik_id};");
 		if (!empty($prijavljen)) {
-			throw new Exception('Student je vec prijavljen!!!');
+			return false;
 		}
 		return DBConnection::exec("INSERT INTO prijave VALUES (NULL, {$ispit_id}, {$korisnik_id})");
 	}
@@ -204,6 +233,18 @@ class Korisnik {
 		return$_ispiti;
 	}
 
+	public static function nadjiPrijavljeneStudenteZaIspit($ispit_id) {
+		if (empty($ispit_id)) {
+			throw new Exception('Id Ispit je prazan!!!');
+		}
+		$ispit = Ispit::nadjiPoId($ispit_id);
+		if (empty($ispit)) {
+			throw new Exception('Ispit nije pronadjen!!!!');
+		}
+		$student_ids = DBConnection::fetchAll("SELECT korisnik_id FROM prijave WHERE ispit_id = {$ispit_id};");;
+		return array_map(function($student_id) {return $student_id['korisnik_id'];}, $student_ids);
+	}
+
 	public static function polazi($ispit_id, $korisnik_id, $odgovori) {
 		if (empty($korisnik_id)) {
 			throw new Exception('Id Korisnika je prazan!!!');
@@ -235,7 +276,26 @@ class Korisnik {
 			: 0;
 		return DBConnection::exec("INSERT INTO rezultati VALUES(NULL, {$ispit->vratiIspitId()}, {$korisnik->vratiKorisnikId()}, {$rezultat});");
 	}
-	
+
+	public static function nadjiSveStudente()
+	{
+		$podaci = DBConnection::fetchAll("SELECT * FROM korisnici WHERE tip_korisnika = " . Korisnik::STUDENT . " ORDER BY korisnik_id ASC;");
+		if (empty($podaci)) {
+			return array();
+		}
+		$studenti = array();
+		foreach ($podaci as $_korisnik) {
+			$korisnik = new self;
+			$korisnik->postaviKorisnikId($_korisnik['korisnik_id']);
+			$korisnik->postaviKorisnickoIme($_korisnik['korisnicko_ime']);
+			$korisnik->postaviIme($_korisnik['ime']);
+			$korisnik->postaviPrezime($_korisnik['prezime']);
+			$korisnik->postaviTipKorisnika($_korisnik['tip_korisnika']);
+			array_push($studenti, $korisnik);
+		}
+		return $studenti;
+	}
+
 	public function vratiKorisnikId()
 	{
 		return $this->korisnik_id;
