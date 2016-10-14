@@ -36,6 +36,7 @@ if (!empty($_POST)) {
 	}
 	if (empty($upozorenja)) {
 		Pitanje::izbrisiPitanjaZaIspit($ispit->vratiIspitId());
+		die;
 		for ($i = 1; $i<= $broj_pitanja; $i++) {
 			$tacan_odgovor_id = $_POST["tacan_odgovor_{$i}"];
 			$pitanje = new Pitanje();
@@ -54,6 +55,9 @@ if (!empty($_POST)) {
 					}
 				}
 			}
+			$url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
+			header('Location: ' . $url . '/profesor.php');
+			exit;
 		}
 	}
 }

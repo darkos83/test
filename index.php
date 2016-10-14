@@ -27,10 +27,10 @@ if (isset($_POST['submit'])) {
 			array_push($upozorenja, 'Ime je prazno!');
 		}
 		if (empty($_POST['prezime'])) {
-			array_push($upozorenja, 'Prezimeime je prazno!');
+			array_push($upozorenja, 'Prezime je prazno!');
 		}
 		if (empty($_POST['korisnicko_ime'])) {
-			array_push($upozorenja, 'Emial je prazan!');
+			array_push($upozorenja, 'Email je prazan!');
 		}
 		$regex = '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/';
 		if (!preg_match($regex, $_POST['korisnicko_ime'])) {

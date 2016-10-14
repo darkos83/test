@@ -44,5 +44,5 @@ if (empty($greske)) {
 	}
 }
 
-include __DIR__ . '/public/views/polazi_ispit.php';
+include __DIR__ . '/public/views/polaganje_ispita.php';
 ?>

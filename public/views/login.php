@@ -4,11 +4,11 @@
         <h3>Uloguj se</h3>
         <div class="form-group hidden za-registraciju">
             <label>Ime</label>
-            <input type="text" name="ime" class="form-control" placeholder="Korisničko ime">
+            <input type="text" name="ime" class="form-control" placeholder="Ime">
         </div>
         <div class="form-group hidden za-registraciju">
             <label>Prezime</label>
-            <input type="text" name="prezime" class="form-control" placeholder="Korisničko ime">
+            <input type="text" name="prezime" class="form-control" placeholder="Prezime">
         </div>
         <div class="form-group">
             <label>Email</label>

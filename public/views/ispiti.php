@@ -5,7 +5,7 @@
 		<p>Popuniti pitanja, ponudjene odgovore i izabrati tačan odgovor</p>
 	</div>
 	<form method="post">
-		<ul>
+		<ol>
 			<?php for ($i=0; $i < $ispit->vratiBrojPitanja(); $i++) : ?>
 				<?php $br = $i +1; $tacan_odgovor = isset($pitanja_i_odgovori["tacan_odgovor_{$br}"]) ? $pitanja_i_odgovori["tacan_odgovor_{$br}"] : 0; ?>
 			<li><input type="text" name="pitanje_<?php echo $i + 1 ?>" class="form-control" placeholder="Pitanje <?php echo $i + 1; ?>"
@@ -35,7 +35,7 @@
 				</ul>
 			</li>
 			<?php endfor; ?>
-		</ul>
+		</ol>
 		<button class="col-md-12 col-xs-12 btn btn-default btn-success">Kreiraj</button>
 	</form>	
 </div>

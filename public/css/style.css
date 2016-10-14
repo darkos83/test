@@ -26,8 +26,14 @@
 .create-exam .header{
 	text-align: center
 }
+.create-exam ol .form-control{
+	display: inline-block; 
+}
+.create-exam ol .radio{
+	margin-left: 20px; 
+}
 .create-exam ul{
-	list-style:none;
+	list-style: lower-alpha;
 }
 .create-exam input[type="radio"]{
 	top: 6px

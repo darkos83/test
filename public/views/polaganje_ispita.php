@@ -1,23 +1,34 @@
 <?php include 'header.php'; ?>
-<?php if (!isset($_SESSION['tip_korisnika']) || $_SESSION['tip_korisnika'] != Korisnik::STUDENT): ?>
-<div class="alert alert-danger my-alert">
-	Morate biti student da bi ste polagali ispite!!!
-</div>
-<?php
-	die;
-	endif;
-?>
-<div class="list-group">
-<?php
-	$ispiti = Ispit::nadjiPoKorisnikId($_SESSION['korisnik_id']);
-	if (!empty($ispiti)) {
-		foreach ($ispiti as $ispit) {
-			$url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . "/polazi_ispit.php?ispit_id={$ispit->vratiIspitId()}";
-			?>
-			<a href="<?php echo $url?>" class="list-group-item"><?php echo $ispit->vratiNazivIspita()?></a>
-		<?php
-		}
-	}
-?>
-</div>
+	<div class="create-exam">
+		<div class="header">
+			<h3>Polaganje ispita iz <?php echo $ispit->vratiNazivIspita();?></h3>
+		</div>
+		<form method="post" action="">
+			<ol>
+				<?php for ($i=0; $i < $ispit->vratiBrojPitanja(); $i++) : ?>
+					<?php $br = $i +1; $tacan_odgovor = isset($pitanja_i_odgovori["tacan_odgovor_{$br}"]) ? $pitanja_i_odgovori["tacan_odgovor_{$br}"] : 0; ?>
+					<li><p name="pitanje_<?php echo $i + 1 ?>" class="form-control">
+							<?php echo isset($pitanja_i_odgovori["pitanje_{$br}"]) ?  $pitanja_i_odgovori["pitanje_{$br}"] : ''?>
+						</p>
+						<?php if (!empty($pitanja_i_odgovori["odgovori_{$br}"])): ?>
+						<ul>
+							<?php foreach ($pitanja_i_odgovori["odgovori_{$br}"] as $id => $odgovor) {?>
+							<li>
+								<div class="radio">
+									<input type="radio" name="tacan_odgovor_<?php echo $i + 1 ?>"
+										   value="<?php echo $id;?>">
+									<p class="form-control" name="odgovor_<?php echo $i + 1 ?>">
+										<?php echo $odgovor;?>
+									</p>
+								</div>
+							</li>
+							<?php }?>
+						</ul>
+						<?php endif ?>
+					</li>
+				<?php endfor; ?>
+			</ol>
+			<button class="col-md-12 col-xs-12 btn btn-default btn-success">Polazi</button>
+		</form>
+	</div>
 <?php include 'footer.php'; ?>

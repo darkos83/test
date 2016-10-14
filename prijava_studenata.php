@@ -23,6 +23,9 @@ if (empty($greske)){
 				Korisnik::prijaviStudentaZaIspit($ispit->vratiIspitId(), $student_id);
 			}
 		}
+		$url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
+		header('Location: ' . $url . '/profesor.php');
+		exit;
 	}
 }
 $studenti = Korisnik::nadjiSveStudente();
