@@ -2,8 +2,14 @@
 include __DIR__ . '/config.php';
 session_start();
 $greske = array();
-if (empty($_SESSION)) {
-	array_push($greske, 'Morate biti ulogovani da bi ste pristupili ovoj stranici!');	
+if (!isset($_SESSION['korisnik_id'])) {
+	$url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
+	header('Location: ' . $url . '/index.php');
+	exit;
+}
+$greske = array();
+if (!isset($_SESSION['tip_korisnika']) || $_SESSION['tip_korisnika'] != Korisnik::PROFESOR) {
+	array_push($greske, 'Morate biti profesor da bi ste pristupili ovoj stranici!');
 }
 $ispit = Ispit::nadjiPoId($_GET['ispit_id']);
 if (empty($ispit)) {
@@ -36,7 +42,6 @@ if (!empty($_POST)) {
 	}
 	if (empty($upozorenja)) {
 		Pitanje::izbrisiPitanjaZaIspit($ispit->vratiIspitId());
-		die;
 		for ($i = 1; $i<= $broj_pitanja; $i++) {
 			$tacan_odgovor_id = $_POST["tacan_odgovor_{$i}"];
 			$pitanje = new Pitanje();
@@ -55,10 +60,10 @@ if (!empty($_POST)) {
 					}
 				}
 			}
-			$url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
-			header('Location: ' . $url . '/profesor.php');
-			exit;
 		}
+		$url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
+		header('Location: ' . $url . '/profesor.php');
+		exit;
 	}
 }
 $pitanja_i_odgovori = Pitanje::nadjiPitanjaIOdgovoreZaPofesore($ispit->vratiIspitId());
