@@ -57,5 +57,5 @@ if (!empty($_POST)) {
 		}
 	}
 }
-$pitanja_i_odgovori = Pitanje::nadjiPitanjaIOdgovore($ispit->vratiIspitId());
+$pitanja_i_odgovori = Pitanje::nadjiPitanjaIOdgovoreZaPofesore($ispit->vratiIspitId());
 include __DIR__ . '/public/views/ispiti.php';

@@ -204,6 +204,38 @@ class Korisnik {
 		return$_ispiti;
 	}
 
+	public static function polazi($ispit_id, $korisnik_id, $odgovori) {
+		if (empty($korisnik_id)) {
+			throw new Exception('Id Korisnika je prazan!!!');
+		}
+		$korisnik = self::nadjiPoId($korisnik_id);
+		if (empty($korisnik)) {
+			throw new Exception('Korisnik nije pronadjen!!!');
+		}
+		if ($korisnik->vratiTipKorisnika() != self::STUDENT) {
+			throw new Exception('Korisnik nije student!!!');
+		}
+		if (empty($ispit_id)) {
+			throw new Exception('Id ispita je prazan!!!');
+		}
+		$ispit = Ispit::nadjiPoId($ispit_id);
+		if (empty($ispit)) {
+			throw new Exception('Nije pronadjen ispit!!!');
+		}
+		if (empty($odgovori)) {
+			throw new Exception('Nisu poslati odgovori!!!');
+		}
+		$upit = "SELECT COUNT(*) AS broj_tacnih_odgovora "
+			. "FROM pitanja "
+			. "WHERE ispit_id = {$ispit->vratiIspitId()} AND tacan_odgovor_id IN (" . implode(',', $odgovori) . ");";
+		$podaci = DBConnection::fetch($upit);
+
+		$rezultat = !empty($podaci['broj_tacnih_odgovora']) ?
+			($podaci['broj_tacnih_odgovora'] / $ispit->vratiBrojPitanja()) * 100
+			: 0;
+		return DBConnection::exec("INSERT INTO rezultati VALUES(NULL, {$ispit->vratiIspitId()}, {$korisnik->vratiKorisnikId()}, {$rezultat});");
+	}
+	
 	public function vratiKorisnikId()
 	{
 		return $this->korisnik_id;

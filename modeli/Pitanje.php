@@ -90,7 +90,7 @@ class Pitanje {
 		return $pitanja;
 	}
 
-	public static function nadjiPitanjaIOdgovore($ispit_id) {
+	public static function nadjiPitanjaIOdgovoreZaPofesore($ispit_id) {
 		if (empty($ispit_id)) {
 			return array();
 		}
@@ -109,6 +109,30 @@ class Pitanje {
 					$pitanja_odgovori["tacan_odgovor_{$br}"] = $key1;
 				}
 				array_push($pitanja_odgovori["odgovori_{$br}"], $odgovor->vratiOdgovor());
+			}
+		}
+		return $pitanja_odgovori;
+	}
+
+	public static function nadjiPitanjaIOdgovoreZaStudente($ispit_id) {
+		if (empty($ispit_id)) {
+			return array();
+		}
+		$pitanja = self::nadjiPoIspitId($ispit_id);
+		if (empty($pitanja)) {
+			return array();
+		}
+		$pitanja_odgovori = array();
+		foreach ($pitanja as $key => $pitanje) {
+			$odgovori = Odgovor::nadjiPoPitanjeId($pitanje->vratiPitanjeId());
+			$br = $key + 1;
+			$pitanja_odgovori["pitanje_{$br}"] = $pitanje->vratiPitanje();
+			$pitanja_odgovori["odgovori_{$br}"] = array();
+			foreach ($odgovori as $key1 => $odgovor) {
+				if ($odgovor->vratiOdgovorId() == $pitanje->vratiTacanOdgovorId()) {
+					$pitanja_odgovori["tacan_odgovor_{$br}"] = $key1;
+				}
+				$pitanja_odgovori["odgovori_{$br}"][$odgovor->vratiOdgovorId()] = $odgovor->vratiOdgovor();
 			}
 		}
 		return $pitanja_odgovori;
